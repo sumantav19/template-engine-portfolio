@@ -1,0 +1,23 @@
+{
+  "name": "template-engine",
+  "version": "1.0.0",
+  "description": "This will be used to maintain the portfolio website for shreya",
+  "main": "index.js",
+  "scripts": {
+    "mustache": "gulp mustache",
+    "gulp": "gulp"
+  },
+  "keywords": [
+    "Mustache"
+  ],
+  "author": "Sumant Dey",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "formidable": "^1.0.17",
+    "fs-extra": "^0.30.0",
+    "gulp": "^3.9.1",
+    "gulp-serve": "^1.4.0",
+    "multer": "^1.2.0",
+    "mustache": "^2.2.1"
+  }
+}

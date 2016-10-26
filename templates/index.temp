@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  	<head>
+	    <meta charset="UTF-8">
+	    <title>{{data.title.data}}</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta name="description" content="{{data.description.data}}">
+	    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+	    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+	    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+	    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+	    <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
+  	</head>
+  	<body>
+  		<section class="page-header">
+		    <img class="project-img" src="{{data.projectImage.data}}">
+		    <h1 class="project-name">{{data.projectName.data}}</h1>
+		    <h2 class="project-tagline">{{data.projectTagLine.data}}</h2>	    
+    	</section>
+		
+	<body>
+</html>
