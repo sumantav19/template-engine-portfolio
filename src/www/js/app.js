@@ -14,7 +14,7 @@ angular.module('TemplateEngine',[])
 		this.story = story;
 	}
 	$scope.file = {};
-	$http.get('http://localhost:3000/json/siteMetadata.json').then(function(response){
+	$http.get('https://shreyaportfolio-sumant19.c9users.io/getMetadata').then(function(response){
 		$scope.metadata =  response.data.data;
 		$scope.titles = [];
 		for ( var props in $scope.metadata){
@@ -23,7 +23,7 @@ angular.module('TemplateEngine',[])
 	});
 	$scope.postMetadata = function(successCallback){
 		// console.log($scope.metadata);
-		$http.post('http://localhost:4000/',{data : $scope.metadata})
+		$http.post('https://shreyaportfolio-sumant19.c9users.io/setMetadata',{data : $scope.metadata})
 		.then(function(response){
 			successCallback && successCallback();
 			document.getElementById('iframe1').contentWindow.location.reload(true);
@@ -39,7 +39,7 @@ angular.module('TemplateEngine',[])
 		var fd = new FormData()
 		fd.append('file',file);
 		$http.post(
-			'http://localhost:4000/upload',
+			'https://shreyaportfolio-sumant19.c9users.io/upload',
 			fd,
 			{       
 				transformRequest : angular.identity,         
@@ -73,7 +73,7 @@ angular.module('TemplateEngine',[])
 	$scope.deleteFile = function(){
 		// console.log(deleteImageFileProperty);
 		// console.log(fileIndex);
-		$http.post("http://localhost:4000/delete",
+		$http.post("https://shreyaportfolio-sumant19.c9users.io/delete",
 			{
 				data : deleteImageFileProperty
 			},{ headers: {

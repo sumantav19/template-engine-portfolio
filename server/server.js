@@ -10,8 +10,20 @@ const handleRequest = function(request,response){
 	response.setHeader('Access-Control-Request-Method', '*');
 	response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
 	response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, cache-control');
-
+	// console.log(request.url);
 	switch (request.url) {
+		case '/' :
+			var indexHtmlFile =  fs.readFile('./src/www/index.html',function(err,data){
+				if(err){
+					response.statusCode = 404;
+					response.write(JSON.stringify(err));
+					response.end();
+				}
+				response.statusCode = 200;
+				response.write(data);
+				response.end();
+			});
+		break;
 		case '/upload':
 			var form = new formidable.IncomingForm();
 			//form.uploadDir('./output/images');
@@ -75,7 +87,20 @@ const handleRequest = function(request,response){
 									
 					
 		break;
-		case '/' :
+		case '/getMetadata':
+			fs.readFile("./json/siteMetadata.json",function(err,data){
+				if(err){
+					response.statusCode = 404;
+					response.write(JSON.stringify(err));
+					response.end();
+					return;
+				}
+				response.statusCode = 200;
+				response.write(data);
+				response.end();
+			})
+		break;
+		case '/setMetadata' :
 			var dataBody = '';
 		 	request.on('data',function(chunk){
 				dataBody += chunk;
@@ -92,9 +117,41 @@ const handleRequest = function(request,response){
 				});	
 			});
 		break;
+		default:
+			if( request.url.match(/output/) ){
+				var outputFilePath = '.' + request.url;
+				fs.readFile(outputFilePath,function(err, data) {
+				    if(err){
+				    	response.statusCode = 404;
+				    	response.write(JSON.stringify(err));
+				    	response.end();
+				    	return;
+				    }
+				    response.statusCode = 200;
+				    response.write(data);
+				    response.end();
+				})
+				// console.log(request.url.match(/output/));
+				return;
+			}
+			var filePath = './src/www' + request.url;
+			console.log(filePath,request.url.match(/[/output/]/));
+			fs.readFile(filePath,function (err,data) {
+				// body...
+				if(err){
+					response.statusCode = 404;
+					response.write(JSON.stringify(err));
+					response.end();
+					return;
+				}
+				response.statusCode = 200;
+				response.write(data);
+				response.end();
+			})
+			// response.end();
 	}
 }
 
 const server = http.createServer(handleRequest);
 
-exports.server = server;
+module.exports = server;
