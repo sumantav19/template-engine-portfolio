@@ -90,9 +90,18 @@ angular.module('TemplateEngine',[])
 			});
 		},function(error){
 			console.log(error);
-		})
-	}
-}])
+		});
+	};
+	
+	$scope.gitPush = function(){
+		$http.get("https://shreyaportfolio-sumant19.c9users.io/gitPush").
+		then(function(response){
+			console.log(response);
+		},function(errorResponse){
+			console.log(errorResponse);
+		});
+	};
+}]);
 // .directive('MetadataTypeInputComponent',[function(){
 // 	return{
 // 		templateUrl : '../partials/metadataTypeInputComponent.html'

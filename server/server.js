@@ -2,7 +2,6 @@ const http =  require("http"),
 	fs = require('fs'),
 	fsExtra = require('fs-extra'),
 	spawn = require("child_process").spawn,
-	querystring = require("querystring"),
 	formidable = require('formidable'),util = require('util');
 
 const handleRequest = function(request,response){
@@ -13,7 +12,7 @@ const handleRequest = function(request,response){
 	// console.log(request.url);
 	switch (request.url) {
 		case '/' :
-			var indexHtmlFile =  fs.readFile('./src/www/index.html',function(err,data){
+			fs.readFile('./src/www/index.html',function(err,data){
 				if(err){
 					response.statusCode = 404;
 					response.write(JSON.stringify(err));
@@ -31,10 +30,12 @@ const handleRequest = function(request,response){
 			form.parse(request,function(err,fields,files){
 				if(err){
 					process.stdout.write(err);
-					response.end('upload failed')
+					response.statusCode = 404;
+					response.write(JSON.stringify(err));
+					response.end('upload failed');
 				}
 				util.inspect({fields:fields,files:files});
-			})
+			});
 			form.on('end',function(fields,files){
 				console.log(this.openedFiles[0].path);		
 				var temp_path = this.openedFiles[0].path;
@@ -43,18 +44,18 @@ const handleRequest = function(request,response){
 					if(err){
 						process.stdout.write(err.toString());
 						response.statusCode = 404;
-						response.end('upload failed')
+						response.end('upload failed');
 					}else{
 						fsExtra.remove(temp_path);
 						setTimeout(function(){
 							response.statusCode = 200;
-							response.write(JSON.stringify({ "file" : "images/"+file_name }))
+							response.write(JSON.stringify({ "file" : "images/"+file_name }));
 							response.end();	
 						}, 2000);
 						
 					}
-				})
-			})
+				});
+			});
 		break;
 		case '/favicon.ico' : 
 			console.log('/favicon.ico');
@@ -98,7 +99,7 @@ const handleRequest = function(request,response){
 				response.statusCode = 200;
 				response.write(data);
 				response.end();
-			})
+			});
 		break;
 		case '/setMetadata' :
 			var dataBody = '';
@@ -117,6 +118,9 @@ const handleRequest = function(request,response){
 				});	
 			});
 		break;
+		case'/gitPush' : 
+			spawn('bash',['debug.sh']);
+		break;
 		default:
 			if( request.url.match(/output/) ){
 				var outputFilePath = '.' + request.url;
@@ -130,12 +134,10 @@ const handleRequest = function(request,response){
 				    response.statusCode = 200;
 				    response.write(data);
 				    response.end();
-				})
-				// console.log(request.url.match(/output/));
+				});
 				return;
 			}
 			var filePath = './src/www' + request.url;
-			console.log(filePath,request.url.match(/[/output/]/));
 			fs.readFile(filePath,function (err,data) {
 				// body...
 				if(err){
@@ -147,10 +149,10 @@ const handleRequest = function(request,response){
 				response.statusCode = 200;
 				response.write(data);
 				response.end();
-			})
+			});
 			// response.end();
 	}
-}
+};
 
 const server = http.createServer(handleRequest);
 
