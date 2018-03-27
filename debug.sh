@@ -6,9 +6,9 @@ cd output
 
 pwd
 
-git config --global user.email "sumantav19@yahoo.in"
+git config --global user.email "<email>"
 
-git config user.name "sumantav19"
+git config user.name "<user name>"
 
 status=$(git status)
 

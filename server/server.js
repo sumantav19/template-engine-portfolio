@@ -1,7 +1,7 @@
 const http =  require("http"),
 	fs = require('fs'),
 	fsExtra = require('fs-extra'),
-	spawn = require("child_process").spawn,
+	spawnSync = require("child_process").spawnSync,
 	formidable = require('formidable'),util = require('util');
 
 const handleRequest = function(request,response){
@@ -109,17 +109,23 @@ const handleRequest = function(request,response){
 			request.on('end',function(){
 				fs.writeFile("./json/siteMetadata.json", dataBody,function(err){
 					if(err) return;
-						spawn('npm',['run','mustache']);
+						spawnSync('npm',['run','mustache']);
 						response.writeHead(200, {'Content-Type': 'text/plain'});
-						setTimeout(function(){
+					//	setTimeout(function(){
 							response.write("Working fine /");
 			 				response.end();
-						}, 2000);
+					//	}, 2000);
 				});	
 			});
 		break;
 		case'/gitPush' : 
-			spawn('bash',['debug.sh']);
+			var gitSpawnShOutput = spawnSync('bash',['debug.sh']);
+			if(!gitSpawnShOutput.error){
+				response.statusCode = 200;
+				response.write(gitSpawnShOutput.output[1]);
+				response.end();
+			}
+			
 		break;
 		default:
 			if( request.url.match(/output/) ){
